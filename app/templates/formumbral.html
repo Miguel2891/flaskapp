@@ -1,0 +1,50 @@
+{% extends "main.html" %}
+
+{% block title%} Umbral {% endblock %}
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+	<br>
+	<h2>Umbral Historico de Meneos</h2>
+	<br>
+	<form action="umbral" class="form-inline" method="post">
+		<input type="number" class="form-control" placeholder="Umbral" name="umbral" maxlength="5" value={{request.form.umbral}}>
+		<input class="btn btn-lg btn-primary" type="submit" name="event_umbral" value="Enviar">
+	</form>
+</div>
+
+<div class="container">
+  <br>
+  <br>
+  <p>Ultimos {{ cuenta }} datos en pasar el umbral de meneos establecido:</p>   
+  <br>         
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Título</th>
+        <th>No. Meneos</th>
+        <th>No. Clics</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for scrap in scrap_list %}
+      <tr>
+        <td>{{ scrap['fecha'] }}</td>
+        <td>{{ scrap['hora'] }}</td>
+        <td>{{ scrap['titulo'] }}</td>
+        <td>{{ scrap['meneo'] }}</td>
+        <td>{{ scrap['clic'] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

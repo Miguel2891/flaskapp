@@ -1,0 +1,61 @@
+
+{% extends "main.html"%}
+
+{% block title%} Media {% endblock %}
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block content %}
+<head>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script type="text/javascript">
+		var eventos = 1
+		$(function(){
+			$('a#procress_input').bind('click', function() {
+
+				if (eventos %  2 == 0){
+					
+					$.getJSON('{{ url_for('background_process', database='local')}}', function(data) {
+						$("#result").text(data.result);
+						$("#resultbd").text(data.resultbd);
+
+					});
+				}
+				else{
+					$.getJSON('{{ url_for('background_process', database='remota')}}', function(data) {
+						$("#result").text(data.result);
+						$("#resultbd").text(data.resultbd);
+					});
+				}
+				eventos = eventos + 1;
+				return false;
+			});
+		});
+	</script>
+</head>
+
+
+<div class="container">
+	<br>
+	<h2>Valor medio del No. de Clics <h2>
+	<br>
+	<form>
+	<a href="#", id="procress_input"><button class="btn btn-lg btn-primary">Calcular Media</button></a>
+	</form>
+</div>
+
+<div class="container">
+  <br>
+  <br>
+  <p>La media de Clics obtenida es: </p>
+  <p id="result"><strong>....</strong></p>   
+  <br>
+  <br>
+  <p>La Base de datos utilizada en este calculo ha sido la BBDD: </p>
+  <p id="resultbd"><strong>....</strong></p>  
+ </div>      
+
+{% endblock %}

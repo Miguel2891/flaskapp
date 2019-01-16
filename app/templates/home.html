@@ -1,0 +1,47 @@
+{% extends "main.html"%}
+
+{% block title%} Form {% endblock %}
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+  <h2>Ultimos datos</h2>
+  <p>Ultimos datos almacenados en la base de datos:</p>            
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Título</th>
+        <th>No. Meneos</th>
+        <th>No. Clics</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for scrap in scrap_list %}
+      <tr>
+        <td>{{ scrap['fecha'] }}</td>
+        <td>{{ scrap['hora'] }}</td>
+        <td>{{ scrap['titulo'] }}</td>
+        <td>{{ scrap['meneo'] }}</td>
+        <td>{{ scrap['clic'] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="container">
+	<br>
+	<h3>Visualizacion de graficas</h3>
+	<br>
+	<form action="" class="form-inline" method="post">
+		<input class="btn btn-lg btn-primary" type="submit" name="Beebotte" value="Graficas">
+	</form>
+</div>
+
+{% endblock %}

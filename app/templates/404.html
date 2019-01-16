@@ -1,0 +1,14 @@
+{% extends "main.html" %}
+
+{% block title%} 404 Not Found {% endblock %}
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block content %}
+<img src="{{ url_for('static', filename='images/notfound.png') }}" style="max-width:300px; margin-left: 30px;">
+<p><mark>Page Not Found</mark></p>
+<p>La URL solicitada no ha sido encontrada en el servidor </p>
+
+{% endblock %}

@@ -1,0 +1,7 @@
+Flask
+pymongo
+beebotte
+bs4
+regex
+Flask-PyMongo
+
