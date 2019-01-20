@@ -4,4 +4,5 @@ beebotte
 bs4
 regex
 Flask-PyMongo
-
+boto3
+dynamodb-json

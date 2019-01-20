@@ -7,7 +7,9 @@ from flask_pymongo import PyMongo
 from scraping import scrapingfunc
 import _thread
 import threading
-
+import boto3
+from dynamodb_json import json_util as json
+import datetime
 
 API_KEY = '8RpTSgXVxjo7yhTobQczfCVu'
 SECRET_KEY = 'qVDtlHxpR2Ku6mDLkuQjvV8yMsVoBzDc'
@@ -31,8 +33,20 @@ def home():
     if request.method == "POST" and request.form["Beebotte"] == "Graficas":
         return redirect("https://beebotte.com/dash/dfc1b0b0-ee74-11e8-a140-675e8012aef3#.W_bbTuInbIV", code=302)
     else:
+        ahora = datetime.datetime.now()
+        ahora_minus_20 = ahora - datetime.timedelta(minutes = 20)
+        horadb_minus_20 = ahora_minus_20.strftime("%H:%M:%S")
+        fechadb = ahora.strftime("%d/%m/%Y")
+        horadb = ahora.strftime("%H:%M:%S")
+        dynamodb = boto3.resource('dynamodb', aws_access_key_id='ASIAX4ZBPOMFJ4JQYLJ7',
+                                aws_secret_access_key='jf8iWBVxdABnHGNNJ9fztjt//hOFOiDHFLqy959/',
+                                region_name='us-east-1',
+                                aws_session_token='FQoGZXIvYXdzEEAaDCfgS7i/IaOp2WkmlSLoAhifl4vayvoHoPb6ImS9R06JBeGvikMLaLhh4uDa17kNnvD0OSt0wPrpD0O60RxPkXrVBR3VuI4VkIC0qcXF58UQawTxJ2JCCN3RPwI4LvJxqXedYYF3Zrlb9jmsRk+aAPc4oaGEtDwQhv87vnEE6ANcFuSGiBpKqtiP7mV8ffg8rOgx8E6dankyJ42R7l4LpjPtsb0TpkD+VWgAr/0RwnIENC1Nd/OoE1tQBlHbQWE82SSW74BqfpVuGKbj3csemVqwYWi6sbAcaxCVEMwsv5cB6m/poAA4aXC/QKBxyKzr8O61IoZx5oXTs5llaYzz/m/dLc8QLOVZ1EVaaTYGHNoeC40FiKx/+2+zMe8wEHT1lsP1F3I4F+zUQrkQMf0T8RX3Sd5y9u9SyhQFo0i0PKQNcvE1ibIeJ1DOqSFGJH47Ll4mPM/gckbUEHCh422n2KTKAIzmv035NjY1pi0nulyLSqgs0hTRnCjhjZLiBQ=='
+                  )
+        table = dynamodb.Table('scrapingTabla')
+        response = table.scan(FilterExpression= "Fecha = :fechadb and Hora between :lo and :hi", ExpressionAttributeValues= {":fechadb": fechadb, ":lo": horadb_minus_20, ":hi": horadb})
         scrap_list = mongo.db.scrapings.find().sort('_id', -1).limit(10);
-        return render_template('home.html', scrap_list = scrap_list)
+        return render_template('home.html', scrap_list = json.loads(response['Items']))
 
 @app.route("/umbral", methods=["GET", "POST"])
 def formumbral():
